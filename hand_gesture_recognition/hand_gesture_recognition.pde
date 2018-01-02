@@ -67,8 +67,9 @@ PImage mesa;
 Minim minim;
 AudioPlayer sound, sound2;
 
-Boton btnPlay;
-Boton btnStop;
+ArrayList<Boton> botones = new ArrayList<Boton>();
+BtnPlay btnPlay;
+BtnStop btnStop;
 
 Rectangle rect;
 
@@ -80,18 +81,17 @@ void setup(){
   
   rect = new Rectangle(20,20,40,40);
   
-  btnPlay = new Boton(50,50,60,60, "Play"); 
-  btnStop = new Boton(200,50,60,60,"Stop");
-   
-  //frame = new Capture(this, camWidth, camHeight );
-  frame = new Capture(this, "name=Logitech HD Webcam C270,size=640x480,fps=30");
+  minim = new Minim(this);
+  createBotones();
+  
+  frame = new Capture(this, camWidth, camHeight );
+  //frame = new Capture(this, "name=Logitech HD Webcam C270,size=640x480,fps=30");
   
   PImOps = new PImageOperations();
   pBackground = new PBGS(FG);
   fd = new FingerDetector(camWidth, camHeight );
   bs = new Detector(this, 0, 0, camWidth, camHeight, 255);
   bstips = new Detector(this, 0, 0, camWidth, camHeight, 255);
-  minim = new Minim(this);
   //sound = minim.loadFile("megalovania.mp3", 2048);
   frame.start();
   mesa = loadImage("mesa.png");  
@@ -116,7 +116,16 @@ void draw(){
         File[] files = fc.getSelectedFiles();
         sound = minim.loadFile(files[0].getPath(), 2048);
         if (files.length>1)
-          sound2 = minim.loadFile(files[1].getPath(), 2048);
+        {  
+           sound2 = minim.loadFile(files[1].getPath(), 2048);
+           btnPlay.setAudio(sound, sound2); 
+           btnStop.setAudio(sound, sound2);
+        }
+        else
+        {
+           btnPlay.setAudio(sound, null); 
+           btnStop.setAudio(sound, null);
+        }
     }
   }
   
@@ -162,22 +171,34 @@ void draw(){
   displayBotones(); 
 }
 
+void createBotones()
+{
+  btnPlay = new BtnPlay(50,50,60,60, "Play"); 
+  btnStop = new BtnStop(200,50,60,60,"Stop");
+  BtnTriggerSound btnEffect1 = new BtnTriggerSound( 100, 450, 80, 60, "Scratch", minim.loadSample("../sonidos/one-scratch.aif", 512));
+ // btnEffect2 = new BtnTriggerSound( 250, 450, 80, 60, "Rap beat", minim.loadSample("../sonidos/white-homeboy-beat.aif", 512));
+  BtnTriggerSound btnEffect3 = new BtnTriggerSound(400, 450, 80, 60, "Balloon", minim.loadSample("../sonidos/balloon-pop.aif", 512));
+  BtnTriggerSound btnEffect4 = new BtnTriggerSound(550, 450, 80, 60, "Ratata", minim.loadSample("../sonidos/ratatat.aif", 512));
+  BtnTriggerSound btnEffect5 = new BtnTriggerSound(700, 450, 80, 60, "Squeal", minim.loadSample("../sonidos/animal-squeal.aif", 512));
+  
+  botones.add(btnPlay);
+  botones.add(btnStop);
+  botones.add(btnEffect1);
+  //botones.add(btnEffect2);
+  botones.add(btnEffect3);
+  botones.add(btnEffect4);
+  botones.add(btnEffect5);
+}
+
 void displayBotones(){
-  btnPlay.display();
-  btnStop.display();
+    for(Boton b: botones)
+        b.display();
 }
 
 void detectBotones()
 {
-  if( btnPlay.isPressed(fd) && !sound.isPlaying()){
-      sound.play();
-      if (sound2!=null)
-        sound2.play();
-  }else if(btnStop.isPressed(fd) && sound.isPlaying()){
-      sound.pause();
-      if (sound2!=null)
-        sound2.pause();
-  }
+  for (Boton b: botones)
+     b.detect(-1);
 }
 
 // force update of the background model when a key is clicked. 
