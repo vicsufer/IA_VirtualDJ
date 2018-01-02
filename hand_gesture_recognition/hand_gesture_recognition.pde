@@ -40,6 +40,8 @@ import processing.video.*;
 import java.awt.Rectangle;
 import javax.swing.JOptionPane;
 import ddf.minim.*;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 PImageOperations  PImOps;
 Capture frame;
@@ -90,7 +92,7 @@ void setup(){
   bs = new Detector(this, 0, 0, camWidth, camHeight, 255);
   bstips = new Detector(this, 0, 0, camWidth, camHeight, 255);
   minim = new Minim(this);
-  sound = minim.loadFile("megalovania.mp3", 2048);
+  //sound = minim.loadFile("megalovania.mp3", 2048);
   frame.start();
   mesa = loadImage("mesa.png");  
 }
@@ -100,6 +102,20 @@ void draw(){
   frame.read();
   
   image(mesa,0,0,camWidth,camHeight);
+  
+  if (sound==null)
+  {
+    JFileChooser fc = new JFileChooser();
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "Audio files", "mp3", "wav", "aif");
+    fc.setFileFilter(filter);
+    int returnVal = fc.showOpenDialog(null);
+    if (returnVal == JFileChooser.APPROVE_OPTION)
+    {
+        File[] files = fc.getSelectedFiles();
+        sound = minim.loadFile(files[0].getPath(), 2048);
+    }
+  }
   
   //   BACKGROUND SUBTRACTION  //
   
