@@ -65,7 +65,7 @@ PImage  FG = createImage(camWidth, camHeight,RGB);
 PImage  imgDiffColor = createImage(camWidth, camHeight,RGB);
 PImage mesa;
 Minim minim;
-AudioPlayer sound;
+AudioPlayer sound, sound2;
 
 Boton btnPlay;
 Boton btnStop;
@@ -109,11 +109,14 @@ void draw(){
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
         "Audio files", "mp3", "wav", "aif");
     fc.setFileFilter(filter);
+    fc.setMultiSelectionEnabled(true);
     int returnVal = fc.showOpenDialog(null);
     if (returnVal == JFileChooser.APPROVE_OPTION)
     {
         File[] files = fc.getSelectedFiles();
         sound = minim.loadFile(files[0].getPath(), 2048);
+        if (files.length>1)
+          sound2 = minim.loadFile(files[1].getPath(), 2048);
     }
   }
   
@@ -154,27 +157,27 @@ void draw(){
     
    //displayDiffColorImage();
    //drawDiffColorImageBoundingBox();
-   
    detectBotones();
- 
-  
   }
-  
-  displayBotones();
- 
+  displayBotones(); 
 }
+
 void displayBotones(){
   btnPlay.display();
   btnStop.display();
 }
+
 void detectBotones()
 {
   if( btnPlay.isPressed(fd) && !sound.isPlaying()){
       sound.play();
+      if (sound2!=null)
+        sound2.play();
   }else if(btnStop.isPressed(fd) && sound.isPlaying()){
       sound.pause();
+      if (sound2!=null)
+        sound2.pause();
   }
-     
 }
 
 // force update of the background model when a key is clicked. 
