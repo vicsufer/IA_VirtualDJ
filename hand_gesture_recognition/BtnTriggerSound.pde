@@ -1,48 +1,15 @@
-class BtnTriggerSound implements Boton
+class BtnTriggerSound extends AbstractBoton
 {
     AudioSample sound;
-  
-    String label;
-    Rectangle rect;
-    int c;
     
     public BtnTriggerSound(int x, int y, int w, int h, String label, AudioSample sound)
     {
-      this.label = label;
-      this.rect = new Rectangle(x,y,w,h);
+      super(x,y,w,h,label);
       this.sound = sound;
     }
     
-    public boolean isPressed(FingerDetector fd)
-    {
-      double centerX = rect.x+rect.width/2;
-      double centerY = rect.y+rect.height/2;
-      boolean press = fd.goodPixel((int) centerX, (int)centerY);
-      if(press)
-      {
-        c = 100;
-        return true;
-      }
-      else
-      {
-        c = 255;
-        return false;
-      }
-    }
-    
-    
-    public void display()
-    {
-        fill(c);
-        rectMode(CORNERS);
-        rect(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
-        fill(0);
-        textAlign(CORNERS);
-        text(label,rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
-    }
-    
     public void detect(int yPos) {
-       if(isPressed(fd)){
+       if(super.isPressed(fd)){
          sound.trigger();
        }
     }

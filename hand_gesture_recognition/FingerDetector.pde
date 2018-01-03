@@ -50,13 +50,17 @@ class FingerDetector{
     if(x1  >= 0 && x1  < out.width && y1  >= 0 && y1  < out.height)
     
     //...count how many are hand pixel... 
-    if(brightness((out.pixels[x1+y1*out.width]&0xff0000)>>16)== 255){count_white++;}
+    if(brightness((out.pixels[x1+y1*out.width]&0xff0000)>>16)== 255){
+        count_white++;
+    }
   }
    
-  //..if they are in the finger's tip region...  
-  if( count_white < finger_size  && count_white != 0) return true; //...at x y coordinate we have a finger's tip pixel 
-  else
-  return false;
-  
+  //..if they are in the finger's tip region... 
+  //count_white < finger_size  && count_white != 0
+  if( count_white ==2){
+      return true; //...at x y coordinate we have a finger's tip pixel 
+  }else{
+      return false;
+  }
 }
 }

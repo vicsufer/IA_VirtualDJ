@@ -75,7 +75,7 @@ Rectangle rect;
 
 void setup(){
    
-  size(900, 600);
+  size(640, 480);//900,600
   f = createFont("", 20);
   textFont(f, 20);
   
@@ -94,7 +94,7 @@ void setup(){
   bstips = new Detector(this, 0, 0, camWidth, camHeight, 255);
   //sound = minim.loadFile("megalovania.mp3", 2048);
   frame.start();
-  mesa = loadImage("mesa.png");  
+  mesa = loadImage("mesa_final.png");  
 }
  
 void draw(){
