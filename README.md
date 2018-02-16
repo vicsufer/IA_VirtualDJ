@@ -1,2 +1,8 @@
 # IA_VirtualDJ
-JavaCV:   https://www.javaadvent.com/2012/12/hand-and-finger-detection-using-javacv.html
+
+## Demo
+[Demo video](https://youtu.be/n4Ms9XRnxWk)
+
+## Setup
+[Setup video](https://www.youtube.com/watch?v=wb0lQHg2GSM)
+
